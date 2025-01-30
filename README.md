@@ -52,7 +52,7 @@ A consumer is a subcalss of either SyncConsumer or AsyncConsumer.
 
 **SyncConsumer:** SyncConsumer will run your code synchronously in a threadpool.
 
-**Step-by-step process of creating `SysncConsumer`:**
+Step-by-step process of creating `SyncConsumer`:
 - First create a `consumers.py` file inside the application.
     ```python
     from channels.consumer import SyncConsumer
@@ -71,3 +71,11 @@ A consumer is a subcalss of either SyncConsumer or AsyncConsumer.
     - `websocket_connect: `This handler is called when client initially opens a connection and is about to finish the WebSocket handshake.
     - `websocket_receive: ` This handler is called when data received from Client.
     - `websocket_disconnect: ` This handler is called when either connection to the client is lost, either from the client closing the connection, the server closing the connection, or loss of the socket.
+
+**AsyncConsumer:** AsyncConsumer will expect you to write async-capable code.
+- Step-by-step process of creating `AsyncConsumer`:
+    ```python
+    from channels.consumer import AsyncConsumer
+    class MyAsyncConsumer(AsyncConsumer):
+        async def  
+    ```
