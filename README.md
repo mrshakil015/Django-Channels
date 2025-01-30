@@ -1,13 +1,22 @@
 # Django-Channels
 
-### Adding Channels to Django Project
-- At first install the `channels`.
+## Contex
+- [Django Channels Project Setup](#django-channels-project-setup)
+- [ProtocolTypeRouter](#protocoltyperouter)
+- [Consumers](#consumers)
+    - [SyncConsumer](#syncconsumer)
+    - [AsyncConsumer](#asyncconsumer)
+
+### Django Channels Project Setup
+- At first install the `channels` and `daphne`.
     ```python
     pip install channels
+    pip install daphne
     ```
-- Include the `channels` inside the `settings.py`
+- Add `channels` and `daphne` to `INSTALLED_APPS` in `settings.py`. Add `daphne` at the top before `channels`:
     ```python
     INSTALLED_APPS = [
+        'daphne',
         'channels',
         ....
         ....
@@ -50,7 +59,8 @@ A consumer is a subcalss of either SyncConsumer or AsyncConsumer.
 - SyncConsumer
 - AsyncConsumer
 
-**SyncConsumer:** SyncConsumer will run your code synchronously in a threadpool.
+### **SyncConsumer:**
+SyncConsumer will run your code synchronously in a threadpool.
 
 Step-by-step process of creating `SyncConsumer`:
 - First create a `consumers.py` file inside the application.
@@ -72,10 +82,50 @@ Step-by-step process of creating `SyncConsumer`:
     - `websocket_receive: ` This handler is called when data received from Client.
     - `websocket_disconnect: ` This handler is called when either connection to the client is lost, either from the client closing the connection, the server closing the connection, or loss of the socket.
 
-**AsyncConsumer:** AsyncConsumer will expect you to write async-capable code.
+### **AsyncConsumer:**
+AsyncConsumer will expect you to write async-capable code.
 - Step-by-step process of creating `AsyncConsumer`:
     ```python
     from channels.consumer import AsyncConsumer
     class MyAsyncConsumer(AsyncConsumer):
-        async def  
+        async def websocket_connect(self, event):
+            print("Websocket Connected..")
+        
+        async def websocket_receive(self, event):
+            print("Message Received...")
+        
+        async def websocket_disconnect(self, event):
+            print("Websocket Disconnected") 
+    ```
+## Routing:
+- Channels provides routing classes that allwo you to combine and stack your consumers (and any other valid ASGI application) to dispatch based on what the connection is.
+- We call the as_asgi() classmethod when routing our consumers.
+- This returns an ASGI wrapper application that will instantiate a new consumer instance for each connection or scope.
+- This is similar to Django's as_view(), which plays the same role for pre-request instances of class-based views.
+
+**How to configure routing:**
+- Create `routing.py` file then write all websocket url patterns inside this file.
+    ```python
+    from django.urls import path
+    from . import consumers
+
+    websocket_urlpatterns = [
+        path('ws/sc/',consumers.MySyncConsumer.as_asgi()),
+        path('ws/ac/',consumers.MyAsyncConsumer.as_asgi()),
+    ]
+    ```
+- Open `asgi.py` file and methioned your `routing.py` file.
+    ```python
+    from channels.routing import ProtocolTypeRouter,URLRouter
+    from channels.auth import AuthMiddlewareStack
+    import myapp.routing #import routing from the app
+
+    application = ProtocolTypeRouter({
+        'http': get_asgi_application(),
+        'websocket': AuthMiddlewareStack( 
+            URLRouter(
+                myapp.routing.websocket_urlpatterns
+            )
+        )
+    })
     ```
