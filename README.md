@@ -8,6 +8,7 @@
     - [AsyncConsumer](#asyncconsumer)
 - [Event](#event)
 - [Routing](#routing)
+- [Handle WebSocket from Frontend](#handle-websocket-from-frontend-javascript-in-django-channels)
 
 ### Django Channels Project Setup
 - At first install the `channels` and `daphne`.
@@ -200,4 +201,83 @@ AsyncConsumer will expect you to write async-capable code.
     })
     ```
 
+⬆️[Go to Context](#context)
+
+## Handle Websocket from Frontend JavaScript in Django Channels:
+- The WebSocket object provides the API for creating and managing a WebSocket connection to a server, as well as for sending and receiving data on the connection.
+- To construct a WebSocket, use the `WebSocket()` constructor.
+    ```js
+    var ws = new WebSocket('ws://127.0.1:8000/ws/sc/');
+    ```
+
+#### **WebSocket Properties:**
+- `onopen - `The `WebSocket.onopen` property is an event handler that is called when the WebSocket connection's readyState changes to 1; this indicates that the connection is ready to send and receive data. It is called with an Event.
+    ```js
+    ws.onopen = function(event){
+        console.log("WebSocket connection open",event);
+    };
+    ```
+- `onmessage - `The `WebSocket.onmessage` property is an event handler that is called when a mssage is received from the server. It is called with a MessageEvent.
+    ```js
+    ws.onmessage = function(event){
+        console.log("WebSocket message received from server",event);
+    };
+    ```
+- `onerror - `The WebSocket interface's onerror event handler property is a function which gets called when an error occurs on the WebSocket.
+    ```js
+    ws.onerror = function(event){
+        console.log("WebSocket Error Occurred",event);
+    };
+    ```
+- `onclose - `The `WebSocket.onclose` property is an event handler that is called when the WebSocket connection's readyState changes to CLOSED. It is called with a CloseEvent.
+    ```js
+    ws.onclose = function(event){
+        console.log("WebSocket Connection closed", event);
+    };
+    ```
+#### **Events:**
+- `open:` The open event is fired when a connection with a WebSocket is opened.
+    ```js
+    ws.addEventListener('open',(event)=>{
+        console.log("WebSocket Connection Open");
+    });
+    ```
+- `message:` The message event is fired when data is received through a WebSocket.
+    ```js
+    ws.addEventListener('message',(event)=>{
+        console.log('WebSocket message received from server',event);
+    });
+    ```
+- `error:` The error event is fired when a connection with a WebSocket has been closed due to an error:
+    ```js
+    ws.addEventListener('error',(event)=>{
+        console.log('WebSocket Error Occurred',event);
+    });
+    ```
+- `close:` The close event is fired when a connection with a WebSocket is closed.
+    ```js
+    ws.addEventListener('close',(event)=>{
+        console.log('WebSocket connection closed',event);
+    });
+    ```
+
+#### **Methods:**
+- `close():` The `WebSocket.close()` method closes the websocket connection or connection attempt, if any. If the connection is already CLOSED, this method does nothing.
+    ```js
+    Syntax:- ws.close(code, reason)
+    ```
+    - `code-` A numeric value indicating the status code explaining why the connection is being closed. If this parameter is not specified, a default value of 1005 is assumed. See the list of status codes of CloseEvent for permitted values.
+    - `reason-` A human-readable string explaining why the connection is closing. This string must be no  longer than 123 bytes of UTF-8 text (not characters)
+    ```js
+    ws.close()
+    ```
+- `send():` The `WebSocket.send()` method enqueues the specific data to be transmitted to the server over the websocket connection, increasing the value of buffered Amount by the number of butes need to contain the data. If the data can't be sent, the socket is closed automatically. The browser will throw an exception if you call send() when the connection is in the CONNECTING state.
+If you call send() when the connection is in the CLOSING or CLOSED states, the browser will silenntly discard the data.
+
+    ```js
+    Syntax:- ws.send(data)
+    ```
+    ```js
+    ws.send("Hello")
+    ```
 ⬆️[Go to Context](#context)
