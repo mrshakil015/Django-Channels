@@ -9,6 +9,7 @@
 - [Event](#event)
 - [Routing](#routing)
 - [Handle WebSocket from Frontend](#handle-websocket-from-frontend-javascript-in-django-channels)
+- [Python JSON Lib and JSON in Django Channels](#python-json-lib-and-json-in-django-channels)
 
 ### Django Channels Project Setup
 - At first install the `channels` and `daphne`.
@@ -281,3 +282,37 @@ If you call send() when the connection is in the CLOSING or CLOSED states, the b
     ws.send("Hello")
     ```
 ⬆️[Go to Context](#context)
+
+## Python JSON Lib and JSON in Django Channels
+### **Python JSON Lib:**
+- import json
+- json.dumps() - This method is used to convert python dictionary into json string.
+    ```python
+    import json
+    dict_data = {'Bangla':87, 'English':67,'Math':88}
+    print(dict_data)
+    json_data = json.dumps(dict_data)
+    print(json_data)
+    ```
+- json.loads() - This method is used to convert json string into Python dictionary.
+    ```python
+    import json
+    dict_data = {'Bangla':87, 'English':67,'Math':88}
+    json_data = json.dumps(dict_data)
+    python_data = json.loads(json_data)
+    print(python_data)
+    ```
+
+### **JavaScript JSON:**
+- JSON.parse() - This method used to convert json string into JavaScript object.
+    ```js
+    json_data = {"Bangla":87, "English":67,"Math":88}
+    js_obj = JSON.parse(json_data)
+    ```
+- JSON.stringify() - This method is used to convert JavaScript object into json string.
+    ```js
+    json_data = {"Bangla":87, "English":67,"Math":88}
+    js_obj = JSON.parse(json_data)
+    back_to_json = JSON.stringify(js_obj)
+    ```
+
