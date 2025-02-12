@@ -1,5 +1,7 @@
 # Django-Channels
 
+Channels preserve the synchronous behavior of Django and add a layer of asynchronous protocols allowing users to write the views that are entirely synchronous, asynchronous, or a mixture of both. Channels basically allow the application to support “long-running connections”. It replaces Django’s default WSGI with its ASGI .
+
 ## Context
 - [Django Channels Project Setup](#django-channels-project-setup)
 - [ProtocolTypeRouter](#protocoltyperouter)
